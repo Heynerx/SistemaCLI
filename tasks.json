@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "name": "Pagar facturas de electricidad",
+    "description": "Revisar y pagar factura del mes; comprobar consumo.",
+    "done": false,
+    "created": "2025-12-22T23:44:03.700305",
+    "completed_at": null
+  },
+  {
+    "id": 2,
+    "name": "Comprar ingredientes para cena navide\u00f1a",
+    "description": "Pavo, patatas, verduras, vino, y postre.",
+    "done": false,
+    "created": "2025-12-22T23:44:03.875356",
+    "completed_at": null
+  },
+  {
+    "id": 3,
+    "name": "Enviar informe mensual al equipo",
+    "description": "Adjuntar m\u00e9tricas y breve resumen.",
+    "done": false,
+    "created": "2025-12-22T23:44:04.008251",
+    "completed_at": null
+  },
+  {
+    "id": 4,
+    "name": "Limpieza profunda del proyecto",
+    "description": "Eliminar archivos temporales, actualizar dependencias, revisar tests.",
+    "done": false,
+    "created": "2025-12-22T23:44:04.110863",
+    "completed_at": null
+  },
+  {
+    "id": 5,
+    "name": "Respaldo de base de datos",
+    "description": "Dump completo y subir a storage remoto.",
+    "done": false,
+    "created": "2025-12-22T23:44:04.212693",
+    "completed_at": null
+  },
+  {
+    "id": 6,
+    "name": "Revisar PR #42",
+    "description": "Revisar cambios, dejar comentarios y aprobar.",
+    "done": false,
+    "created": "2025-12-22T23:44:04.324234",
+    "completed_at": null
+  },
+  {
+    "id": 7,
+    "name": "Planificar objetivos 2026",
+    "description": "Establecer OKRs y roadmap Q1.",
+    "done": false,
+    "created": "2025-12-22T23:44:04.403985",
+    "completed_at": null
+  },
+  {
+    "id": 8,
+    "name": "Reservar cita m\u00e9dica",
+    "description": "Llamar al centro y reservar revisi\u00f3n anual.",
+    "done": false,
+    "created": "2025-12-22T23:44:04.507386",
+    "completed_at": null
+  },
+  {
+    "id": 9,
+    "name": "Comprar regalo para Ana",
+    "description": "Idea: libro + tarjeta personalizada (\u00a1no olvides envolver).",
+    "done": false,
+    "created": "2025-12-22T23:44:04.601803",
+    "completed_at": null
+  },
+  {
+    "id": 10,
+    "name": "Tarea de prueba con descripci\u00f3n muy larga",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. (texto largo de prueba para truncado en la consola)",
+    "done": false,
+    "created": "2025-12-22T23:44:04.704036",
+    "completed_at": null
+  }
+]

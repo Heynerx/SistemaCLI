@@ -1,0 +1,183 @@
+import json
+import click
+from pathlib import Path
+from datetime import datetime
+
+# CONFIGURACIÓN
+TASKS_FILE = Path('tasks.json')
+MAX_LENGTH = 50
+
+# INICIALIZACIÓN
+
+def init_storage():
+    if not TASKS_FILE.exists():
+        TASKS_FILE.write_text('[]', encoding='utf-8')
+
+
+# CARGAR Y GUARDAR TAREAS
+
+def load_tasks():
+    if not TASKS_FILE.exists():
+        return []
+    try:
+        with TASKS_FILE.open('r', encoding='utf-8') as f:
+            return json.load(f)
+    except json.JSONDecodeError:
+        return []
+
+def save_tasks(tasks):
+    with TASKS_FILE.open('w', encoding='utf-8') as f:
+        json.dump(tasks, f, indent=2) 
+
+
+# VALIDACIONES Y UTILIDADES
+def get_next_task_id(tasks):
+    return max((t.get('id', 0) for t in tasks), default=0) + 1
+
+
+def find_task(tasks, task_id):
+    for t in tasks:
+        if t.get('id') == task_id:
+            return t
+    return None
+
+
+def validate_length(value, field, max_len=MAX_LENGTH):
+    if value is None:
+        return
+    if len(value) > max_len:
+        raise click.ClickException(f"{field} supera la longitud máxima de {max_len} caracteres")
+
+
+# CREAR / MODIFICAR TAREAS
+def create_task_json(name, description=None):
+    tasks = load_tasks()
+    if not name or not name.strip():
+        raise click.ClickException("El nombre de la tarea no puede estar vacío")
+    validate_length(name, 'name')
+    task = {
+        "id": get_next_task_id(tasks),
+        "name": name.strip(),
+        "description": description or "",
+        "done": False,
+        "created": datetime.utcnow().isoformat(),
+        "completed_at": None
+    }
+    tasks.append(task)
+    save_tasks(tasks)
+    return task
+
+def update_task_json(task_id, name=None, description=None, done=None):
+    tasks = load_tasks()
+    task = find_task(tasks, task_id)
+    if not task:
+        raise click.ClickException("Tarea no encontrada")
+    if name is not None:
+        validate_length(name, 'name')
+        task['name'] = name.strip()
+    if description is not None:
+        task['description'] = description
+    if done is not None:
+        task['done'] = bool(done)
+        task['completed_at'] = datetime.utcnow().isoformat() if done else None
+    save_tasks(tasks)
+    return task
+
+
+def delete_task_json(task_id):
+    """Elimina la tarea con el id dado y la devuelve."""
+    tasks = load_tasks()
+    task = find_task(tasks, task_id)
+    if not task:
+        raise click.ClickException("Tarea no encontrada")
+    tasks = [t for t in tasks if t.get('id') != task_id]
+    save_tasks(tasks)
+    return task
+
+
+def list_tasks_json(status=None):
+    tasks = load_tasks()
+    if status == 'done':
+        return [t for t in tasks if t.get('done')]
+    if status == 'todo':
+        return [t for t in tasks if not t.get('done')]
+    return tasks
+
+
+def set_task_done(task_id, done=True):
+    tasks = load_tasks()
+    task = find_task(tasks, task_id)
+    if not task:
+        raise click.ClickException("Tarea no encontrada")
+    task['done'] = bool(done)
+    task['completed_at'] = datetime.utcnow().isoformat() if done else None
+    save_tasks(tasks)
+    return task
+
+
+# CLI
+
+@click.group()
+def main():
+    """Sistema CLI usando JSON"""
+    pass
+
+
+
+@main.command('add')
+@click.argument('name')
+@click.option('--description', '-d', default='', help='Descripción de la tarea')
+def add(name, description):
+    init_storage()
+    task = create_task_json(name, description)
+    click.echo(f"Tarea creada: [{task['id']}] {task['name']}")
+
+@main.command('update')
+@click.argument('task_id', type=int)
+@click.argument('name')
+@click.option('--description', '-d', default=None, help='Nueva descripción (opcional)')
+def update(task_id, name, description):
+    init_storage()
+    task = update_task_json(task_id, name=name, description=description)
+    click.echo(f"Tarea [{task['id']}] actualizada: {task['name']}")
+
+
+@main.command('delete')
+@click.argument('task_id', type=int)
+def delete(task_id):
+    init_storage()
+    deleted = delete_task_json(task_id)
+    click.echo(f"Tarea [{deleted['id']}] eliminada: {deleted['name']}")
+
+
+
+@main.command('list')
+@click.option('--status', type=click.Choice(['all', 'todo', 'done']), default='all', help='Filtrar por estado')
+def list(status):
+    tasks = list_tasks_json(None if status == 'all' else status)
+    if not tasks:
+        click.echo("No hay tareas.")
+        return
+    for t in tasks:
+        state = '✓' if t.get('done') else ' '
+        click.echo(f"[{t.get('id')}] {state} {t.get('name')} - {t.get('description')}")
+
+
+@main.command('mark-done')
+@click.argument('task_id', type=int)
+def mark_done(task_id):
+    init_storage()
+    set_task_done(task_id, True)
+    click.echo(f"Tarea [{task_id}] marcada como terminada.")
+
+@main.command('mark-in-progress')
+@click.argument('task_id', type=int)
+def mark_in_progress(task_id):
+    init_storage()
+    set_task_done(task_id, False)
+    click.echo(f"Tarea [{task_id}] marcada como en progreso.")
+
+
+
+if __name__ == '__main__':
+    main()
