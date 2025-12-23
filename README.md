@@ -47,4 +47,7 @@ python3 ./tareasCLI mark-done 1
 
 ---
 
+Proyecto de roadmap.sh
+https://roadmap.sh/projects/task-tracker
+
 Licencia: MIT (añade o ajusta según prefieras)
