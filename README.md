@@ -4,33 +4,16 @@
 
 ---
 
-## 🧭 Descripción
+## Descripción
 
 Proyecto minimalista que proporciona una interfaz de línea de comandos para crear, listar, actualizar y eliminar tareas. Las tareas se almacenan en `tasks.json` en el directorio del proyecto.
 
-## ✅ Requisitos
+## Requisitos
 
 - Python 3.8+
 - (Opcional) Un entorno virtual (se incluye uno en `./env` si lo has creado)
 
-## ⚙️ Instalación
-
-1. Crear y activar un entorno virtual (opcional pero recomendado):
-
-```bash
-python3 -m venv env
-source env/bin/activate
-```
-
-2. Instalar dependencias (si fuera necesario):
-
-```bash
-pip install -r requirements.txt
-```
-
-> Nota: este proyecto utiliza `click` y no requiere un `setup.py` para usar la CLI directamente mediante `python ./tareasCLI`.
-
-## 🚀 Uso
+## Uso
 
 Ejecuta la CLI con el Python del entorno virtual (o `python3` del sistema):
 
@@ -57,20 +40,7 @@ python3 ./tareasCLI list --status all
 python3 ./tareasCLI mark-done 1
 ```
 
-## 🧪 Script de pruebas
-
-Hay un script `add_test_tasks.sh` que limpia `tasks.json`, añade 10 tareas de prueba y muestra el listado:
-
-```bash
-bash add_test_tasks.sh
-```
-
-## 📝 Notas y mejoras propuestas
-
-- Actualmente la CLI solo admite `name` y `--description`. No hay flags para prioridad, fecha de vencimiento o etiquetas (puedo añadirlos si quieres).
-- Se muestra un DeprecationWarning por `datetime.utcnow()`. Se recomienda cambiar a objetos timezone-aware (`datetime.now(timezone.utc)`), puedo aplicar el cambio.
-
-## 🤝 Contribuir
+## Contribuir
 
 1. Abrir un issue o un PR con la mejora propuesta.
 2. Añadir tests (si procede) y documentar los cambios en el README.
